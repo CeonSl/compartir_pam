@@ -86,8 +86,8 @@ class _MainAppState extends State<MainApp> {
       productoRecieved = json.decode(responseValidate.body);
       Product productoToCompare =
           Product(nombre: '', cantidad: 0, disponibilidad: true, urlFoto: '');
-      int cantidad = productoRecieved.entries.first.value;
-      productoToCompare.cantidad = cantidad;
+      int cantidadRecieved = productoRecieved.entries.first.value;
+      productoToCompare.cantidad = cantidadRecieved;
       if (productoToCompare.cantidad != producto.cantidad) {
         products.clear();
         recieveProducts();
@@ -106,6 +106,7 @@ class _MainAppState extends State<MainApp> {
             "disponibilidad": false
           };
         }
+
         response = await http.patch(
             Uri.parse(
                 "https://compartir-pam-default-rtdb.firebaseio.com/productos/$sendKey.json"),
@@ -116,7 +117,7 @@ class _MainAppState extends State<MainApp> {
             "cantidad": cantidad,
             "producto": producto.nombre
           };
-
+          print(cantidad);
           responseCompromiso = await http.post(
               Uri.parse(
                   "https://compartir-pam-default-rtdb.firebaseio.com/compromiso.json"),
@@ -300,6 +301,18 @@ class _MainAppState extends State<MainApp> {
                                                                     showSnackbar(
                                                                         context,
                                                                         "El máximo son: ${products[index].cantidad}",
+                                                                        const Color.fromARGB(
+                                                                            255,
+                                                                            211,
+                                                                            198,
+                                                                            12));
+                                                                  } else if (int
+                                                                          .parse(
+                                                                              cantidadSend) <
+                                                                      1) {
+                                                                    showSnackbar(
+                                                                        context,
+                                                                        "El minimo debe ser 1 producto",
                                                                         const Color.fromARGB(
                                                                             255,
                                                                             211,
